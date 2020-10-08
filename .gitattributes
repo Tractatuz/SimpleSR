@@ -1,2 +1,2 @@
-*.cpp -text crlf diff
-*.h -text crlf diff
+*.cpp -text crlf diff=cpp
+*.h -text crlf diff=cpp
