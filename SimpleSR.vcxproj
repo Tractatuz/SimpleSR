@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{DDA44ADD-E33B-409F-A2B0-01D4560E870E}</ProjectGuid>
+    <ProjectGuid>{C06C5713-BEE4-4143-9277-DEFC711C451D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>SimpleSR</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
@@ -147,33 +147,33 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Resource.h" />
-    <ClInclude Include="SimpleSR.h" />
-    <ClInclude Include="Sources\BaseObject.h" />
-    <ClInclude Include="Sources\Define.h" />
-    <ClInclude Include="Sources\Framework.h" />
-    <ClInclude Include="Sources\Matrix.h" />
-    <ClInclude Include="Sources\Vector3.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="SimpleSR.cpp" />
-    <ClCompile Include="Sources\BaseObject.cpp" />
-    <ClCompile Include="Sources\Framework.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="SimpleSR.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="SimpleSR.ico" />
     <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Sources\BaseObject.cpp" />
+    <ClCompile Include="Sources\Framework.cpp" />
+    <ClCompile Include="Sources\SimpleSR.cpp" />
+    <ClCompile Include="Sources\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Sources\BaseObject.h" />
+    <ClInclude Include="Sources\Define.h" />
+    <ClInclude Include="Sources\Framework.h" />
+    <ClInclude Include="Sources\Matrix.h" />
+    <ClInclude Include="Sources\Resource.h" />
+    <ClInclude Include="Sources\SimpleSR.h" />
+    <ClInclude Include="Sources\stdafx.h" />
+    <ClInclude Include="Sources\targetver.h" />
+    <ClInclude Include="Sources\Vector3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
