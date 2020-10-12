@@ -73,8 +73,8 @@ void Renderer::DrawMesh()
 
 		for (int j = 0; j < 3; ++j)
 		{
-			//trianglePrimitive[j] = Matrix4x4::TransformCoord(camera->proj, Matrix4x4::TransformCoord(camera->view, trianglePrimitive[j]));
-			trianglePrimitive[j] = Matrix4x4::TransformCoord(camera->view, trianglePrimitive[j]);
+			trianglePrimitive[j] = Matrix4x4::TransformCoord(camera->proj, Matrix4x4::TransformCoord(camera->view, trianglePrimitive[j]));
+			//trianglePrimitive[j] = Matrix4x4::TransformCoord(camera->view, trianglePrimitive[j]);
 		}
 
 		DrawWireframe(trianglePrimitive);
@@ -88,10 +88,10 @@ void Renderer::DrawMesh()
 
 void Renderer::DrawLine(const Vector3 & vertex1, const Vector3 & vertex2)
 {
-	int x1 = (vertex1.x + 1) * WINDOW_SIZE_X * 0.5;
-	int y1 = (-vertex1.y + 1) * WINDOW_SIZE_Y * 0.5;
-	int x2 = (vertex2.x + 1) * WINDOW_SIZE_X * 0.5;
-	int y2 = (-vertex2.y + 1) * WINDOW_SIZE_Y * 0.5;
+	int x1 = vertex1.x;
+	int y1 = vertex1.y;
+	int x2 = vertex2.x;
+	int y2 = vertex2.y;
 
 	//transpose line if it is too steep
 	bool steep = false;
@@ -120,21 +120,21 @@ void Renderer::DrawLine(const Vector3 & vertex1, const Vector3 & vertex2)
 	{
 		if (steep) 
 		{
-			if (y * WINDOW_SIZE_X + x >= WINDOW_SIZE_X * WINDOW_SIZE_Y)
-			{
-				continue;
-			}
-
-			gBuffer[y * WINDOW_SIZE_X + x] = 0x00;
-		}
-		else 
-		{
 			if (x * WINDOW_SIZE_X + y >= WINDOW_SIZE_X * WINDOW_SIZE_Y)
 			{
 				continue;
 			}
 
 			gBuffer[x * WINDOW_SIZE_X + y] = 0x00;
+		}
+		else
+		{
+			if (y * WINDOW_SIZE_X + x >= WINDOW_SIZE_X * WINDOW_SIZE_Y)
+			{
+				continue;
+			}
+
+			gBuffer[y * WINDOW_SIZE_X + x] = 0x00;
 		}
 
 		error2 += derror2;
@@ -148,6 +148,8 @@ void Renderer::DrawLine(const Vector3 & vertex1, const Vector3 & vertex2)
 
 void Renderer::DrawWireframe(Vector3 * vertices)
 {
+	ViewportTransform(vertices);
+
 	DrawLine(vertices[0], vertices[1]);
 	DrawLine(vertices[1], vertices[2]);
 	DrawLine(vertices[0], vertices[2]);

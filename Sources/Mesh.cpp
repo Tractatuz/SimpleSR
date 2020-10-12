@@ -15,7 +15,7 @@ Mesh::~Mesh()
 
 void Mesh::Initialize()
 {
-	LoadMeshFromFile("Meshes/cube.obj");
+	LoadMeshFromFile("Meshes/monkey.obj");
 	//rotX = rotY = rotZ = 0.0f;
 }
 
