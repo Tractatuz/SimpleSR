@@ -18,6 +18,12 @@
     <ClCompile Include="Sources\stdafx.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="Sources\Mesh.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Renderer.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sources\BaseObject.h">
@@ -45,6 +51,12 @@
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="Sources\Resource.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Mesh.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Renderer.h">
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>

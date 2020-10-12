@@ -149,6 +149,8 @@
   <ItemGroup>
     <ClCompile Include="Sources\BaseObject.cpp" />
     <ClCompile Include="Sources\Framework.cpp" />
+    <ClCompile Include="Sources\Mesh.cpp" />
+    <ClCompile Include="Sources\Renderer.cpp" />
     <ClCompile Include="Sources\SimpleSR.cpp" />
     <ClCompile Include="Sources\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -162,6 +164,8 @@
     <ClInclude Include="Sources\Define.h" />
     <ClInclude Include="Sources\Framework.h" />
     <ClInclude Include="Sources\Matrix.h" />
+    <ClInclude Include="Sources\Mesh.h" />
+    <ClInclude Include="Sources\Renderer.h" />
     <ClInclude Include="Sources\Resource.h" />
     <ClInclude Include="Sources\SimpleSR.h" />
     <ClInclude Include="Sources\stdafx.h" />
