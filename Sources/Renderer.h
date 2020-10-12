@@ -5,7 +5,7 @@
 #include "Vector3.h"
 
 class Mesh;
-//class Camera;
+class Camera;
 class Renderer : BaseObject
 {
 public:
@@ -16,15 +16,12 @@ private:
 	int gBuffer[WINDOW_SIZE_X * WINDOW_SIZE_Y];
 	float zBuffer[WINDOW_SIZE_X * WINDOW_SIZE_Y];
 
-	int testPixelCount = 0;
-	int testTriCount = 0;
-
 	HDC screen_dc;
 	HDC backbuffer_dc;
 	HBITMAP backbuffer_bitmap;
 
 	Mesh* mesh;
-	//Camera* camera;
+	Camera* camera;
 	
 	Vector3 lightDir = Vector3(1, 1, 1);
 
@@ -35,6 +32,10 @@ public:
 
 protected:
 	virtual void Release() override;
+
+public:
+	void SetMesh(Mesh* m) { this->mesh = m; }
+	void SetCamera(Camera* c) { this->camera = c; }
 
 private:
 	void CreateBuffer();

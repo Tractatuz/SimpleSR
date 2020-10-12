@@ -3,6 +3,7 @@
 #include "BaseObject.h"
 
 class Mesh;
+class Camera;
 class Renderer;
 class Framework : public BaseObject
 {
@@ -12,6 +13,7 @@ public:
 
 private:
 	Mesh* mesh;
+	Camera* camera;
 	Renderer* renderer;
 
 public:

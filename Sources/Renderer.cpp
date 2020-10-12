@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "Renderer.h"
 #include "Mesh.h"
+#include "Camera.h"
 
 extern HWND hWnd;
 
@@ -58,33 +59,31 @@ void Renderer::SwapChain()
 
 void Renderer::DrawMesh()
 {
-	//testPixelCount = 0;
-	//testTriCount = 0;
+	int numFaces = mesh->numFaces;
+	Vector3 trianglePrimitive[3], normalPrimitive[3];
+	for (int i = 0; i < numFaces; ++i)
+	{
+		trianglePrimitive[0] = mesh->vertices[mesh->vertexIndices[i].x];
+		trianglePrimitive[1] = mesh->vertices[mesh->vertexIndices[i].y];
+		trianglePrimitive[2] = mesh->vertices[mesh->vertexIndices[i].z];
 
-	//int numFaces = mesh->numFaces;
-	//Vector3 trianglePrimitive[3], normalPrimitive[3];
-	//for (int i = 0; i < numFaces; ++i)
-	//{
-	//	trianglePrimitive[0] = mesh->vertices[mesh->vertexIndices[i].x];
-	//	trianglePrimitive[1] = mesh->vertices[mesh->vertexIndices[i].y];
-	//	trianglePrimitive[2] = mesh->vertices[mesh->vertexIndices[i].z];
+		normalPrimitive[0] = mesh->normals[mesh->normalsIndices[i].x];
+		normalPrimitive[1] = mesh->normals[mesh->normalsIndices[i].y];
+		normalPrimitive[2] = mesh->normals[mesh->normalsIndices[i].z];
 
-	//	normalPrimitive[0] = mesh->normals[mesh->normalsIndices[i].x];
-	//	normalPrimitive[1] = mesh->normals[mesh->normalsIndices[i].y];
-	//	normalPrimitive[2] = mesh->normals[mesh->normalsIndices[i].z];
+		for (int j = 0; j < 3; ++j)
+		{
+			//trianglePrimitive[j] = Matrix4x4::TransformCoord(camera->proj, Matrix4x4::TransformCoord(camera->view, trianglePrimitive[j]));
+			trianglePrimitive[j] = Matrix4x4::TransformCoord(camera->view, trianglePrimitive[j]);
+		}
 
-	//	for (int j = 0; j < 3; ++j) 
-	//	{
-	//		trianglePrimitive[j] = VertexShader(viewProj, trianglePrimitive[j]);
-	//	}
+		DrawWireframe(trianglePrimitive);
 
-	//	DrawWireframe(trianglePrimitive);
-
-	//	/*if (DrawTriangles(trianglePrimitive))
-	//	{
-	//		++testTriCount;
-	//	}*/
-	//}
+		//	/*if (DrawTriangles(trianglePrimitive))
+		//	{
+		//		++testTriCount;
+		//	}*/
+	}
 }
 
 void Renderer::DrawLine(const Vector3 & vertex1, const Vector3 & vertex2)
