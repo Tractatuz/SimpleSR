@@ -159,11 +159,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Sources\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sources\BaseObject.h" />
     <ClInclude Include="Sources\Camera.h" />
-    <ClInclude Include="Sources\Define.h" />
     <ClInclude Include="Sources\Framework.h" />
     <ClInclude Include="Sources\Matrix.h" />
     <ClInclude Include="Sources\Mesh.h" />
@@ -172,6 +172,7 @@
     <ClInclude Include="Sources\SimpleSR.h" />
     <ClInclude Include="Sources\stdafx.h" />
     <ClInclude Include="Sources\targetver.h" />
+    <ClInclude Include="Sources\Transform.h" />
     <ClInclude Include="Sources\Vector3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Mesh.h"
+#include "Transform.h"
 #include <sstream>
 #include <fstream>
 
@@ -15,39 +16,13 @@ Mesh::~Mesh()
 
 void Mesh::Initialize()
 {
-	LoadMeshFromFile("Meshes/monkey.obj");
-	//rotX = rotY = rotZ = 0.0f;
+	transform = new Transform();
+	LoadMeshFromFile("Meshes/monkey2.obj");
 }
 
 void Mesh::Update()
 {
-	/*rotX += rotXSpeed;
-	rotY += rotYSpeed;
-	rotZ += rotZSpeed;
-
-	Matrix4x4 rotXmat, rotYmat, rotZmat;
-	rotXmat.mMatrix[0] = 1.0f;
-	rotXmat.mMatrix[5] = cos(rotX);
-	rotXmat.mMatrix[6] = -sin(rotX);
-	rotXmat.mMatrix[9] = sin(rotX);
-	rotXmat.mMatrix[10] = cos(rotX);
-	rotXmat.mMatrix[15] = 1.0f;
-
-	rotYmat.mMatrix[0] = cos(rotY);
-	rotYmat.mMatrix[2] = sin(rotY);
-	rotYmat.mMatrix[5] = 1.0f;
-	rotYmat.mMatrix[8] = -sin(rotY);
-	rotYmat.mMatrix[10] = cos(rotY);
-	rotYmat.mMatrix[15] = 1.0f;
-
-	rotZmat.mMatrix[0] = cos(rotZ);
-	rotZmat.mMatrix[1] = -sin(rotZ);
-	rotZmat.mMatrix[4] = sin(rotZ);
-	rotZmat.mMatrix[5] = cos(rotZ);
-	rotZmat.mMatrix[10] = 1;
-	rotZmat.mMatrix[15] = 1.0f;
-
-	local = rotXmat;*/
+	transform->Update();
 }
 
 void Mesh::Render()
@@ -56,14 +31,17 @@ void Mesh::Render()
 
 void Mesh::Release()
 {
+	delete transform;
 }
 
 void Mesh::LoadMeshFromFile(std::string path)
 {
+	// TODO : 
 	std::ifstream file;
 	file.open(path.c_str());
 
 	std::string line, key, x, y, z;
+
 	//float tempU, tempV, intpart;
 	IntVector3 indices[3];
 	char delimeter = '/';

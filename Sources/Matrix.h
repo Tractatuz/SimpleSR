@@ -10,6 +10,8 @@ struct Matrix4x4
 		memset(mMatrix, 0.0f, sizeof(mMatrix));
 	}
 
+	float mMatrix[16];
+
 	Matrix4x4 operator * (Matrix4x4& rhs)
 	{
 		Matrix4x4 results;
@@ -36,14 +38,15 @@ struct Matrix4x4
 		return results;
 	}
 
-	float operator () (const int& y, const int& x) const
+	float operator () (const int& x, const int& y) const
 	{
-		return mMatrix[y * 4 + x];
+		return mMatrix[x * 4 + y];
 	}
 
 	static Vector3 TransformNormal(const Matrix4x4& m, const Vector3& v)
 	{
 		Vector3 result;
+		// TODO : 
 		return result;
 	}
 
@@ -58,5 +61,9 @@ struct Matrix4x4
 		return result;
 	}
 
-	float mMatrix[16];
+	void Identity()
+	{
+		memset(mMatrix, 0.0f, sizeof(mMatrix));
+		mMatrix[0] = mMatrix[5] = mMatrix[10] = mMatrix[15] = 1.0f;
+	}
 };

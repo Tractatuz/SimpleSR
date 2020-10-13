@@ -3,6 +3,7 @@
 #include "BaseObject.h"
 #include "Vector3.h"
 
+class Transform;
 class Mesh : BaseObject
 {
 public:
@@ -19,11 +20,7 @@ public:
 	std::vector<IntVector3> textureIndices;
 	std::vector<IntVector3> normalsIndices;
 
-	//float rotX, rotY, rotZ;
-	//float rotXSpeed = 0.0001f;
-	//float rotYSpeed = 0.0000f;
-	//float rotZSpeed = 0.000f;
-	//Matrix4x4 local;
+	Transform* transform;
 
 public:
 	virtual void Initialize() override;

@@ -29,6 +29,7 @@ void Framework::Initialize()
 
 void Framework::Update()
 {
+	mesh->Update();
 	camera->Update();
 }
 

@@ -4,6 +4,7 @@
 #include "Renderer.h"
 #include "Mesh.h"
 #include "Camera.h"
+#include "Transform.h"
 
 extern HWND hWnd;
 
@@ -19,9 +20,6 @@ Renderer::~Renderer()
 void Renderer::Initialize()
 {
 	CreateBuffer();
-
-	//this->mesh = mesh;
-	//this->camera = camera;
 }
 
 void Renderer::Update()
@@ -73,21 +71,17 @@ void Renderer::DrawMesh()
 
 		for (int j = 0; j < 3; ++j)
 		{
-			trianglePrimitive[j] = Matrix4x4::TransformCoord(camera->proj, Matrix4x4::TransformCoord(camera->view, trianglePrimitive[j]));
-			//trianglePrimitive[j] = Matrix4x4::TransformCoord(camera->view, trianglePrimitive[j]);
+			trianglePrimitive[j] = Matrix4x4::TransformCoord(camera->proj, Matrix4x4::TransformCoord(camera->view, Matrix4x4::TransformCoord(mesh->transform->GetLocalToWorldMatrix(), trianglePrimitive[j])));
 		}
 
 		DrawWireframe(trianglePrimitive);
-
-		//	/*if (DrawTriangles(trianglePrimitive))
-		//	{
-		//		++testTriCount;
-		//	}*/
+		//DrawTriangles(trianglePrimitive);
 	}
 }
 
 void Renderer::DrawLine(const Vector3 & vertex1, const Vector3 & vertex2)
 {
+	// TODO : 
 	int x1 = vertex1.x;
 	int y1 = vertex1.y;
 	int x2 = vertex2.x;
@@ -155,7 +149,7 @@ void Renderer::DrawWireframe(Vector3 * vertices)
 	DrawLine(vertices[0], vertices[2]);
 }
 
-bool Renderer::DrawTriangles(Vector3* vertices)
+void Renderer::DrawTriangles(Vector3* vertices)
 {
 	ViewportTransform(vertices);
 	
@@ -176,8 +170,6 @@ bool Renderer::DrawTriangles(Vector3* vertices)
 			}*/
 		}
 	}
-
-	return false;
 }
 
 void Renderer::ViewportTransform(Vector3* vertices)

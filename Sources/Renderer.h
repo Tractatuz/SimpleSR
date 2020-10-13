@@ -1,7 +1,6 @@
 #pragma once
 
 #include "BaseObject.h"
-#include "Define.h"
 #include "Vector3.h"
 
 class Mesh;
@@ -45,7 +44,7 @@ private:
 
 	void DrawLine(const Vector3& vertex1, const Vector3& vertex2);
 	void DrawWireframe(Vector3* vertices);
-	bool DrawTriangles(Vector3* vertices);
+	void DrawTriangles(Vector3* vertices);
 	void ViewportTransform(Vector3* vertices);
 	//void SetMinMax(int &xMax, int &xMin, int &yMax, int &yMin, const Vector3* vertices);
 };

@@ -27,12 +27,12 @@
     <ClCompile Include="Sources\Camera.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="Sources\Transform.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sources\BaseObject.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="Sources\Define.h">
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="Sources\Framework.h">
@@ -63,6 +63,9 @@
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="Sources\Camera.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Transform.h">
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>
