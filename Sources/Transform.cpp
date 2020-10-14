@@ -9,34 +9,62 @@ Transform::~Transform()
 {
 }
 
-void Transform::MakeScaleMatrix()
+Matrix4x4 Transform::MakeScaleMatrix()
 {
+	Matrix4x4 scaleMat;
+	// TODO : 
+	return scaleMat;
 }
 
-void Transform::MakeRotationMatrix()
+Matrix4x4 Transform::MakeRotationMatrix()
 {
-	rotation.x += rotXSpeed;
+	float xRadian = DegreeToRadian(rotation.x);
+	float yRadian = DegreeToRadian(rotation.y);
+	float zRadian = DegreeToRadian(rotation.z);
 
-	Matrix4x4 rotXmat;
+	Matrix4x4 rotXmat, rotYmat, rotZmat;
 	rotXmat.mMatrix[0] = 1.0f;
-	rotXmat.mMatrix[5] = cos(rotation.x);
-	rotXmat.mMatrix[6] = -sin(rotation.x);
-	rotXmat.mMatrix[9] = sin(rotation.x);
-	rotXmat.mMatrix[10] = cos(rotation.x);
+	rotXmat.mMatrix[5] = cos(xRadian);
+	rotXmat.mMatrix[6] = -sin(xRadian);
+	rotXmat.mMatrix[9] = sin(xRadian);
+	rotXmat.mMatrix[10] = cos(xRadian);
 	rotXmat.mMatrix[15] = 1.0f;
 
-	localToWorldMatrix = rotXmat;
+	rotYmat.mMatrix[0] = cos(yRadian);
+	rotYmat.mMatrix[2] = sin(yRadian);
+	rotYmat.mMatrix[5] = 1.0f;
+	rotYmat.mMatrix[8] = -sin(yRadian);
+	rotYmat.mMatrix[10] = cos(yRadian);
+	rotYmat.mMatrix[15] = 1.0f;
+
+	rotZmat.mMatrix[0] = cos(zRadian);
+	rotZmat.mMatrix[1] = -sin(zRadian);
+	rotZmat.mMatrix[4] = sin(zRadian);
+	rotZmat.mMatrix[5] = cos(zRadian);
+	rotZmat.mMatrix[10] = 1.0f;
+	rotZmat.mMatrix[15] = 1.0f;
+
+	return rotXmat * rotYmat * rotZmat;
 }
 
-void Transform::MakePositionMatrix()
+Matrix4x4 Transform::MakePositionMatrix()
 {
+	Matrix4x4 positionMat;
+	// TODO : 
+	return positionMat;
 }
 
 void Transform::MakeLocalToWorldMatrix()
 {
-	MakeScaleMatrix();
-	MakeRotationMatrix();
-	MakePositionMatrix();
+	Matrix4x4 scaleMat = MakeScaleMatrix();
+	Matrix4x4 rotationMat = MakeRotationMatrix();
+	Matrix4x4 positionMat = MakePositionMatrix();
+	localToWorldMatrix = scaleMat * rotationMat * positionMat;
+}
+
+float Transform::DegreeToRadian(float degree)
+{
+	return degree * 3.141592f / 180; 
 }
 
 void Transform::Initialize()

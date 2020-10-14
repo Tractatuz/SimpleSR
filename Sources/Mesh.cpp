@@ -17,7 +17,8 @@ Mesh::~Mesh()
 void Mesh::Initialize()
 {
 	transform = new Transform();
-	LoadMeshFromFile("Meshes/monkey2.obj");
+	transform->SetRotation(Vector3(0, 0, 15));
+	LoadMeshFromFile("Meshes/cube.obj");
 }
 
 void Mesh::Update()

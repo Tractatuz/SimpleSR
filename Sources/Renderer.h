@@ -22,6 +22,7 @@ private:
 	Mesh* mesh;
 	Camera* camera;
 	
+	bool isWireFrameMode = true;
 	Vector3 lightDir = Vector3(1, 1, 1);
 
 public:
@@ -46,6 +47,10 @@ private:
 	void DrawWireframe(Vector3* vertices);
 	void DrawTriangles(Vector3* vertices);
 	void ViewportTransform(Vector3* vertices);
-	//void SetMinMax(int &xMax, int &xMin, int &yMax, int &yMin, const Vector3* vertices);
+	void SetMinMax(int& xMax, int& xMin, int& yMax, int& yMin, const Vector3* vertices);
+	bool IsInsideTriangle(int x, int y, const Vector3* vertices);
+
+	//Vector3 VertexShader(const Matrix4x4& viewProj, const Vector3& vertex);
+	//int PixelShader(float u, float v);
 };
 

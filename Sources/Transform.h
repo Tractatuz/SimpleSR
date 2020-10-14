@@ -19,19 +19,17 @@ private:
 	Matrix4x4 positionMatrix;
 	Matrix4x4 localToWorldMatrix;
 
-	// Test
-	float rotXSpeed = 0.001f;
-
 public:
 	void SetPosition(const Vector3& pos) { this->position = pos; }
 	void SetRotation(const Vector3& rot) { this->rotation = rot; }
 	Matrix4x4 GetLocalToWorldMatrix() { return localToWorldMatrix; }
 
 private:
-	void MakeScaleMatrix();
-	void MakeRotationMatrix();
-	void MakePositionMatrix();
+	Matrix4x4 MakeScaleMatrix();
+	Matrix4x4 MakeRotationMatrix();
+	Matrix4x4 MakePositionMatrix();
 	void MakeLocalToWorldMatrix();
+	float DegreeToRadian(float degree);
 
 public:
 	virtual void Initialize() override;

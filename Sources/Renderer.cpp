@@ -6,6 +6,8 @@
 #include "Camera.h"
 #include "Transform.h"
 
+#define NOMINMAX
+
 extern HWND hWnd;
 
 Renderer::Renderer()
@@ -15,22 +17,6 @@ Renderer::Renderer()
 Renderer::~Renderer()
 {
 	Release();
-}
-
-void Renderer::Initialize()
-{
-	CreateBuffer();
-}
-
-void Renderer::Update()
-{
-}
-
-void Renderer::Render()
-{
-	ClearBuffer();
-	DrawMesh();
-	SwapChain();
 }
 
 void Renderer::CreateBuffer()
@@ -43,15 +29,15 @@ void Renderer::CreateBuffer()
 
 void Renderer::ClearBuffer()
 {
-	//memset(gBuffer, 0x88, sizeof(gBuffer));
+	// Reset gBuffer Blue
 	std::fill(gBuffer, gBuffer + (WINDOW_SIZE_X * WINDOW_SIZE_Y), 0x000000FF);
+	// Reset zBuffer zero
 	memset(zBuffer, 0, sizeof(zBuffer));
-	//std::fill(zBuffer, zBuffer + (WINDOW_SIZE_X * WINDOW_SIZE_Y), camera->far_limit);
 }
 
 void Renderer::SwapChain()
 {
-	int copysize = SetBitmapBits(backbuffer_bitmap, sizeof(gBuffer), gBuffer);
+	SetBitmapBits(backbuffer_bitmap, sizeof(gBuffer), gBuffer);
 	BitBlt(screen_dc, 0, 0, WINDOW_SIZE_X, WINDOW_SIZE_Y, backbuffer_dc, 0, 0, SRCCOPY);
 }
 
@@ -74,68 +60,97 @@ void Renderer::DrawMesh()
 			trianglePrimitive[j] = Matrix4x4::TransformCoord(camera->proj, Matrix4x4::TransformCoord(camera->view, Matrix4x4::TransformCoord(mesh->transform->GetLocalToWorldMatrix(), trianglePrimitive[j])));
 		}
 
-		DrawWireframe(trianglePrimitive);
-		//DrawTriangles(trianglePrimitive);
+		if (isWireFrameMode)
+		{
+			DrawWireframe(trianglePrimitive);
+		}
+		else
+		{
+			DrawTriangles(trianglePrimitive);
+		}
 	}
 }
 
 void Renderer::DrawLine(const Vector3 & vertex1, const Vector3 & vertex2)
 {
-	// TODO : 
-	int x1 = vertex1.x;
-	int y1 = vertex1.y;
-	int x2 = vertex2.x;
-	int y2 = vertex2.y;
-
-	//transpose line if it is too steep
-	bool steep = false;
-	if (std::abs(x1 - x2) < std::abs(y1 - y2)) 
+	// x1, y1 is always leftside;
+	int x1, x2, y1, y2;
+	if (vertex2.x >= vertex1.x)
 	{
-		std::swap(x1, y1);
-		std::swap(x2, y2);
-		steep = true;
+		x1 = (int)vertex1.x;
+		y1 = (int)vertex1.y;
+		x2 = (int)vertex2.x;
+		y2 = (int)vertex2.y;
+	}
+	else
+	{
+		x1 = (int)vertex2.x;
+		y1 = (int)vertex2.y;
+		x2 = (int)vertex1.x;
+		y2 = (int)vertex1.y;
 	}
 
-	//Redefine line so that it is left to right
-	if (x1 > x2) 
+	float dx = vertex2.x - vertex1.x;
+	float dy = vertex2.y - vertex1.y;
+	
+	bool isSteep = false;
+	if (std::abs(dx) < 1)
 	{
-		std::swap(x1, x2);
-		std::swap(y1, y2);
+		isSteep = true;
 	}
 
-	//Redefined to use only int arithmetic
-	int dx = x2 - x1;
-	int dy = y2 - y1;
-	int derror2 = std::abs(dy) * 2;
-	int error2 = 0;
-	int y = y1;
-
-	for (int x = x1; x <= x2; x++) 
+	if (isSteep)
 	{
-		if (steep) 
+		if (dy > 0)
 		{
-			if (x * WINDOW_SIZE_X + y >= WINDOW_SIZE_X * WINDOW_SIZE_Y)
+			for (int x = x1, y = y1; y <= y2; ++y)
 			{
-				continue;
+				gBuffer[y * WINDOW_SIZE_X + x] = 0x00;
 			}
 
-			gBuffer[x * WINDOW_SIZE_X + y] = 0x00;
+			return;
 		}
 		else
 		{
-			if (y * WINDOW_SIZE_X + x >= WINDOW_SIZE_X * WINDOW_SIZE_Y)
+			for (int x = x1, y = y1; y >= y2; --y)
 			{
-				continue;
+				gBuffer[y * WINDOW_SIZE_X + x] = 0x00;
 			}
 
-			gBuffer[y * WINDOW_SIZE_X + x] = 0x00;
+			return;
+		}
+	}
+	else
+	{
+		bool isSlopeNegative = false;
+		if (dx * dy < 0)
+		{
+			isSlopeNegative = true;
 		}
 
-		error2 += derror2;
-		if (error2 > dx) 
+		for (int x = x1, y = y1; x <= x2; ++x)
 		{
-			y += (y2 > y1 ? 1 : -1);
-			error2 -= dx * 2;
+			if (std::abs(dy) < 1)
+			{
+				gBuffer[y * WINDOW_SIZE_X + x] = 0x00;
+			}
+			else
+			{
+				if (isSlopeNegative)
+				{
+					for (; (y - y1) >= dy / dx * (x - x1); --y)
+					{
+						gBuffer[y * WINDOW_SIZE_X + x] = 0x00;
+					}
+				}
+				else
+				{
+					for (; (y - y1) <= dy / dx * (x - x1); ++y)
+					{
+						gBuffer[y * WINDOW_SIZE_X + x] = 0x00;
+					}
+				}
+			}
 		}
 	}
 }
@@ -152,22 +167,23 @@ void Renderer::DrawWireframe(Vector3 * vertices)
 void Renderer::DrawTriangles(Vector3* vertices)
 {
 	ViewportTransform(vertices);
-	
+
 	int xMax = 0, xMin = 0, yMax = 0, yMin = 0;
-	//SetMinMax(xMax, xMin, yMax, yMin, vertices);
+	SetMinMax(xMax, xMin, yMax, yMin, vertices);
 
 	for (int y = yMin; y <= yMax; ++y) 
 	{
 		for (int x = xMin; x <= xMax; ++x)
 		{
-			/*if (IsInsideTriangle(x, y, vertices))
+			if (IsInsideTriangle(x, y, vertices))
 			{
-				gBuffer[x * WINDOW_SIZE_X + y] = PixelShader(0, 0);
+				//gBuffer[x * WINDOW_SIZE_X + y] = PixelShader(0, 0);
+				gBuffer[x * WINDOW_SIZE_X + y] = 0x00;
 			}
 			else
 			{
 				int i = 0;
-			}*/
+			}
 		}
 	}
 }
@@ -176,26 +192,56 @@ void Renderer::ViewportTransform(Vector3* vertices)
 {
 	for (int i = 0; i < 3; ++i) 
 	{
-		vertices[i].x = ((vertices[i].x + 1) * WINDOW_SIZE_X * 0.5) + 0.5;
-		vertices[i].y = ((vertices[i].y + 1) * WINDOW_SIZE_Y * 0.5) + 0.5;
+		vertices[i].x = ((vertices[i].x + 1) * WINDOW_SIZE_X * 0.5f) + 0.5f;
+		vertices[i].y = ((vertices[i].y + 1) * WINDOW_SIZE_Y * 0.5f) + 0.5f;
 	}
 }
 
-//void Renderer::SetMinMax(int & xMax, int & xMin, int & yMax, int & yMin, const Vector3* vertices)
+void Renderer::SetMinMax(int& xMax, int& xMin, int& yMax, int& yMin, const Vector3* vertices)
+{
+	/*xMax = std::max({ vertices[0].x, vertices[1].x, vertices[2].x });
+	xMin = std::min({ vertices[0].x, vertices[1].x, vertices[2].x });
+	
+	yMax = std::max({ vertices[0].y, vertices[1].y, vertices[2].y });
+	yMin = std::min({ vertices[0].y, vertices[1].y, vertices[2].y });
+	
+	xMax = std::min(xMax, WINDOW_SIZE_X - 1);
+	xMin = std::max(xMin, 0);
+	
+	yMax = std::min(yMax, WINDOW_SIZE_Y - 1);
+	yMin = std::max(yMin, 0);*/
+}
+
+bool Renderer::IsInsideTriangle(int x, int y, const Vector3* vertices)
+{
+	return false;
+}
+
+//Vector3 Renderer::VertexShader(const Matrix4x4 & viewProj, const Vector3 & vertex)
 //{
-//	xMax = std::max({ vertices[0].x, vertices[1].x, vertices[2].x });
-//	xMin = std::min({ vertices[0].x, vertices[1].x, vertices[2].x });
-//
-//	yMax = std::max({ vertices[0].y, vertices[1].y, vertices[2].y });
-//	yMin = std::min({ vertices[0].y, vertices[1].y, vertices[2].y });
-//
-//	//Clip against screen
-//	xMax = std::min(xMax, WINDOW_SIZE_X - 1);
-//	xMin = std::max(xMin, 0);
-//
-//	yMax = std::min(yMax, WINDOW_SIZE_Y - 1);
-//	yMin = std::max(yMin, 0);
+//	return Vector3();
 //}
+//
+//int Renderer::PixelShader(float u, float v)
+//{
+//	return 0;
+//}
+
+void Renderer::Initialize()
+{
+	CreateBuffer();
+}
+
+void Renderer::Update()
+{
+}
+
+void Renderer::Render()
+{
+	ClearBuffer();
+	DrawMesh();
+	SwapChain();
+}
 
 void Renderer::Release()
 {
