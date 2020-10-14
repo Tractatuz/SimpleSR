@@ -6,8 +6,6 @@
 #include "Camera.h"
 #include "Transform.h"
 
-#define NOMINMAX
-
 extern HWND hWnd;
 
 Renderer::Renderer()
