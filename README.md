@@ -8,4 +8,3 @@ Simple Software Rendering Project For Window To Study
  - Free Camera
  - Texturing
  - Lighting
- - Display FPS

@@ -12,7 +12,9 @@ Transform::~Transform()
 Matrix4x4 Transform::MakeScaleMatrix()
 {
 	Matrix4x4 scaleMat;
-	// TODO : 
+	scaleMat.mMatrix[0] = scale.x;
+	scaleMat.mMatrix[5] = scale.y;
+	scaleMat.mMatrix[10] = scale.z;
 	return scaleMat;
 }
 
@@ -50,7 +52,9 @@ Matrix4x4 Transform::MakeRotationMatrix()
 Matrix4x4 Transform::MakePositionMatrix()
 {
 	Matrix4x4 positionMat;
-	// TODO : 
+	positionMat.mMatrix[12] = position.x;
+	positionMat.mMatrix[13] = position.y;
+	positionMat.mMatrix[14] = position.z;
 	return positionMat;
 }
 

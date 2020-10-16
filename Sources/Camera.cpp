@@ -17,13 +17,57 @@ void Camera::Initialize()
 
 void Camera::Update()
 {
+	// TODO : Camera move by Input
+
+	Vector3 look = target - position;
+	look.Normalize();
+
+	Vector3 right = look.CrossProduct(up);
+	right.Normalize();
+
+	Vector3 lookUp = look.CrossProduct(right);
+	lookUp.Normalize();
+
+	if (GetAsyncKeyState(VK_RBUTTON) & 0x8000)
+	{
+		if (GetAsyncKeyState('W') & 0x8000)
+		{
+			position = position + look * camSpeed;
+		}
+
+		if (GetAsyncKeyState('A') & 0x8000)
+		{
+			position = position - right * camSpeed;
+		}
+
+		if (GetAsyncKeyState('S') & 0x8000)
+		{
+			position = position - look * camSpeed;
+		}
+
+		if (GetAsyncKeyState('D') & 0x8000)
+		{
+			position = position + right * camSpeed;
+		}
+
+		if (GetAsyncKeyState('Q') & 0x8000)
+		{
+			position = position + lookUp * camSpeed;
+		}
+
+		if (GetAsyncKeyState('Z') & 0x8000)
+		{
+			position = position - lookUp * camSpeed;
+		}
+	}
+
 	CalcViewMatrix();
 	CalcProjMatrix();
 }
 
 void Camera::CalcViewMatrix()
 {
-	memset(proj.mMatrix, 0, sizeof(proj.mMatrix));
+	view.Identity();
 
 	Vector3 zaxis = target - position;
 	zaxis.Normalize();
@@ -48,7 +92,7 @@ void Camera::CalcViewMatrix()
 
 void Camera::CalcProjMatrix()
 {
-	memset(proj.mMatrix, 0, sizeof(proj.mMatrix));
+	proj.Identity();
 
 	float h = 1.0f / tanf(fovY / 2.0f);
 	float w = h / aspect;
